@@ -16,6 +16,8 @@ public class Craps {
 
     private boolean canComeOut;
 
+    private static final int INITIAL_CREDITS = 10;
+
     private static final int[] COME_OUT_WIN = {7, 11};
 
     private static final int[] COME_OUT_LOSS = {2, 3, 12};
@@ -24,13 +26,14 @@ public class Craps {
 
     private static final int TURN_START_POINT = -1;
 
+    private int diceTotal;
     /*****************************************************************
      Constructor creates the Craps game.
      *****************************************************************/
     public Craps() {
         this.currentPoint = TURN_START_POINT;
 
-        this.creditBalance = 0;
+        this.creditBalance = INITIAL_CREDITS;
 
         this.currentMessage = "Roll come out roll";
 
@@ -94,17 +97,29 @@ public class Craps {
             return;
         }
 
-        final int diceTotal = rollDice();
+        this.diceTotal = rollDice();
 
         // Check if the roll was in the COME_OUT_WIN array of values
-        if (IntStream.of(COME_OUT_WIN).anyMatch(x -> x == diceTotal)) {
+        if (IntStream.of(COME_OUT_WIN).anyMatch(x -> x == this.diceTotal)) {
             this.creditBalance++;
-        } else if (IntStream.of(COME_OUT_LOSS)
-            .anyMatch(x -> x == diceTotal)
+
+            this.currentMessage = "You won that turn.";
+
+            this.canComeOut = true;
+        } else if (
+            IntStream.of(COME_OUT_LOSS).anyMatch(x -> x == this.diceTotal)
         ) {
             this.creditBalance--;
+
+            this.currentMessage = "You lost that turn";
+
+            this.canComeOut = true;
         } else {
-            this.currentPoint = diceTotal;
+            this.currentPoint = this.diceTotal;
+
+            this.currentMessage = "Please roll.";
+
+            this.canComeOut = false;
         }
     }
 
@@ -113,26 +128,27 @@ public class Craps {
      *****************************************************************/
     public void roll() {
         if (! okToRoll()) {
-            this.currentMessage = "Cannot roll.";
+            this.currentMessage = "Please come out.";
 
             return;
         }
 
-        final int diceTotal = this.rollDice();
+        this.diceTotal = this.rollDice();
 
-        // Check if the diceTotal is equal tot he ROLL_LOSS value
-        if (diceTotal == ROLL_LOSS) {
+        if (this.diceTotal == ROLL_LOSS) {
             this.creditBalance--;
 
             this.currentPoint = TURN_START_POINT;
 
             this.currentMessage = "You lost that turn.";
-        } else if (diceTotal == this.currentPoint) {
+
+            this.canComeOut = true;
+        } else if (this.diceTotal == this.currentPoint) {
             this.creditBalance++;
 
             this.currentPoint = TURN_START_POINT;
 
-            this.currentMessage = "You wont that turn";
+            this.currentMessage = "You won that turn";
         } else {
             this.currentMessage = "Please roll again";
         }
@@ -158,6 +174,11 @@ public class Craps {
 
             diceTotal += die.getValue();
         }
+
+        return diceTotal;
+    }
+
+    public int getDiceTotal() {
         return diceTotal;
     }
 }
