@@ -35,7 +35,7 @@ public class Craps {
 
         this.creditBalance = INITIAL_CREDITS;
 
-        this.currentMessage = "Roll come out roll";
+        this.currentMessage = "Let's play craps!!";
 
         this.canComeOut = true;
     }
@@ -111,13 +111,13 @@ public class Craps {
         ) {
             this.creditBalance--;
 
-            this.currentMessage = "You lost that turn";
+            this.currentMessage = "You lost that turn.";
 
             this.canComeOut = true;
         } else {
             this.currentPoint = this.diceTotal;
 
-            this.currentMessage = "Please roll.";
+            this.currentMessage = "Please roll again.";
 
             this.canComeOut = false;
         }
@@ -148,9 +148,11 @@ public class Craps {
 
             this.currentPoint = TURN_START_POINT;
 
-            this.currentMessage = "You won that turn";
+            this.currentMessage = "You won that turn.";
+
+            this.canComeOut = true;
         } else {
-            this.currentMessage = "Please roll again";
+            this.currentMessage = "Please roll again.";
         }
     }
 
