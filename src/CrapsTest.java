@@ -8,24 +8,30 @@ public class CrapsTest {
         // does game start with 10 credits?
         final int gameCredits = 10;
 
+        boolean testsPassed = true;
+
         if (game.getCredits() != gameCredits) {
             System.out.println("Game should start with 10 credits");
-        }
-
-        if (game.okToRoll()) {
-            System.out.println("Game should not allow a roll");
-        }
-
-        game.comeOut();
-
-        if (! game.okToRoll()) {
-            System.out.println("Game should allow a roll");
+            testsPassed = false;
         }
 
         final int comeOut = -1;
 
         if (game.getPoint() != comeOut) {
             System.out.println("Initial game point should be -1");
+            testsPassed = false;
+        }
+
+        if (game.okToRoll()) {
+            System.out.println("Game should not allow a roll");
+            testsPassed = false;
+        }
+
+        game.comeOut();
+
+        if (! game.okToRoll() && game.getCredits() == 10) {
+            System.out.println("Game should allow a roll");
+            testsPassed = false;
         }
 
         // check setCredits()
@@ -35,6 +41,11 @@ public class CrapsTest {
 
         if (game.getCredits() != credits) {
             System.out.println("Game should now have 5 credits");
+            testsPassed = false;
+        }
+
+        if (testsPassed) {
+            System.out.println("All tests passed");
         }
     }
 

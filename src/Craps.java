@@ -1,3 +1,4 @@
+import java.util.HashMap;
 import java.util.stream.IntStream;
 
 /*****************************************************************
@@ -6,7 +7,7 @@ import java.util.stream.IntStream;
  @version 03-01-2017
  *****************************************************************/
 public class Craps {
-    private GVdie[] gVdies = {new GVdie(), new GVdie()};
+    private HashMap<Integer, GVdie> gVdies = new HashMap<>();
 
     private int currentPoint;
 
@@ -38,6 +39,9 @@ public class Craps {
         this.currentMessage = "Let's play craps!!";
 
         this.canComeOut = true;
+
+        gVdies.put(1, new GVdie());
+        gVdies.put(2, new GVdie());
     }
 
     /*****************************************************************
@@ -73,7 +77,7 @@ public class Craps {
      @return the current die
      *****************************************************************/
     public GVdie getDie(final int num) {
-        return this.gVdies[num];
+        return this.gVdies.get(num);
     }
 
     /*****************************************************************
@@ -97,7 +101,7 @@ public class Craps {
             return;
         }
 
-        this.diceTotal = rollDice();
+        this.rollDice();
 
         // Check if the roll was in the COME_OUT_WIN array of values
         if (IntStream.of(COME_OUT_WIN).anyMatch(x -> x == this.diceTotal)) {
@@ -133,7 +137,7 @@ public class Craps {
             return;
         }
 
-        this.diceTotal = this.rollDice();
+        this.rollDice();
 
         if (this.diceTotal == ROLL_LOSS) {
             this.creditBalance--;
@@ -153,6 +157,8 @@ public class Craps {
             this.canComeOut = true;
         } else {
             this.currentMessage = "Please roll again.";
+
+            this.canComeOut = false;
         }
     }
 
@@ -166,18 +172,15 @@ public class Craps {
 
     /*****************************************************************
      roll the dice.
-     @return the dice total
      *****************************************************************/
-    private int rollDice() {
-        int diceTotal = 0;
+    private void rollDice() {
+        diceTotal = 0;
 
-        for (GVdie die : this.gVdies) {
+        gVdies.forEach((dieNumber, die) -> {
             die.roll();
 
             diceTotal += die.getValue();
-        }
-
-        return diceTotal;
+        });
     }
 
     public int getDiceTotal() {

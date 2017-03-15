@@ -45,12 +45,12 @@ public class CrapsGUI extends JFrame implements ActionListener {
         Color diceBackground = Color.decode("#FFA225");
         Color diceForeground = Color.decode("#214AB2");
 
-        d1 = game.getDie(0);
+        d1 = game.getDie(1);
         d1.setBackground(diceBackground);
         d1.setForeground(diceForeground);
         d1.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 
-        d2 = game.getDie(1);
+        d2 = game.getDie(2);
         d2.setBackground(Color.BLACK);
         d2.setForeground(Color.RED);
         d2.setBorder(javax.swing.BorderFactory.createEmptyBorder());
